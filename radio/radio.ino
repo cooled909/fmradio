@@ -1,11 +1,9 @@
-#define uint8_t byte
 #include <TEA5767.h>
-#include <Wire.h>
 #include "Arduino.h"
+#include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7735.h>
 #include <SPI.h>
-#include <EEPROM.h>
 #include <DS3231.h>
 
   #define TFT_CS        10
@@ -89,6 +87,9 @@ void savedStationDraw(){
   if(prevHour > 12){
     tft.print("PM");
   }
+  else if(prevHour == 0){
+    tft.print("12");
+  }
   else{
     tft.print("AM");
   }
@@ -111,6 +112,9 @@ void savedStationDraw(){
   tft.setCursor(0,105);
   if(dt.hour > 12){
     tft.print(dt.hour-12);
+  }
+  else if(dt.hour == 0){
+    tft.print("12");
   }
   else{
     tft.print(dt.hour);
@@ -146,6 +150,9 @@ void clockDraw(){
   if(prevHour > 12){
     tft.print(prevHour-12);
   }
+  else if(prevHour == 0){
+    tft.print("12");
+  }
   else{
     tft.print(prevHour);
   }
@@ -173,6 +180,9 @@ void clockDraw(){
   tft.setCursor(0,105);
   if(dt.hour > 12){
     tft.print(dt.hour-12);
+  }
+  else if(dt.hour == 0){
+    tft.print("12");
   }
   else{
     tft.print(dt.hour);
@@ -381,15 +391,15 @@ void TickFct_Stereo(){
       }
     break;
     case ST_SwitchToFav:
-      if(buttonPressed == 1){
+      if(buttonPressed == 1 && freq != 0){
         freq = fav1;
         radio.setFrequency(freq);
       }
-      else if(buttonPressed == 2){
+      else if(buttonPressed == 2 && freq != 0){
         freq = fav2;
         radio.setFrequency(freq);
       }
-      else if(buttonPressed == 3){
+      else if(buttonPressed == 3 && freq != 0){
         freq = fav3;
         radio.setFrequency(freq);
       }
