@@ -1,3 +1,4 @@
+#define uint8_t byte
 #include <TEA5767.h>
 #include "Arduino.h"
 #include <Wire.h>
@@ -50,9 +51,9 @@ const unsigned long period = 50;
 int count = 0;
 int buttonPressed;
 
-float fav1;
-float fav2;
-float fav3;
+float fav1 = 0;
+float fav2 = 0;
+float fav3 = 0;
 
 int prevMonth;
 int prevDay;
@@ -283,7 +284,7 @@ void setup()
 
   clock.begin();
 
-  //clock.setDateTime(2022, 5, 30, 11, 9, 30);
+  //clock.setDateTime(2022, 5, 30, 0, 9, 30);
   //for testing
   
   //clock.setDateTime(__DATE__, __TIME__);
@@ -373,10 +374,16 @@ void TickFct_Stereo(){
   switch(ST_State){ //actions
     case ST_Next:
         freq += .1;
+        if(freq > 108.0){
+          freq = 88.0;
+        }
         radio.setFrequency(freq);
     break;
     case ST_Prev:
       freq -= .1;
+      if(freq < 88.0){
+          freq = 108.0;
+        }
       radio.setFrequency(freq);
     break;
     case ST_Fav:
@@ -391,15 +398,15 @@ void TickFct_Stereo(){
       }
     break;
     case ST_SwitchToFav:
-      if(buttonPressed == 1 && freq != 0){
+      if(buttonPressed == 1 && fav1 != 0){
         freq = fav1;
         radio.setFrequency(freq);
       }
-      else if(buttonPressed == 2 && freq != 0){
+      else if(buttonPressed == 2 && fav2 != 0){
         freq = fav2;
         radio.setFrequency(freq);
       }
-      else if(buttonPressed == 3 && freq != 0){
+      else if(buttonPressed == 3 && fav3 != 0){
         freq = fav3;
         radio.setFrequency(freq);
       }
